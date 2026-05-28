@@ -1308,9 +1308,13 @@ function doLogin() {
 }
 
 function doLogout() {
-  if (_unsubTasks) _unsubTasks();
-  if (_unsubSuggestions) _unsubSuggestions();
+  // Unsubscribe all listeners
+  if (_unsubTasks) { _unsubTasks(); _unsubTasks = null; }
+  if (_unsubSuggestions) { _unsubSuggestions(); _unsubSuggestions = null; }
   Object.values(_unsubMsgs).forEach(u => u && u());
+  // Clear ALL cached data so next user starts fresh
+  tasks = []; threads = []; messages = {}; suggestions = [];
+  _unsubMsgs = {};
   currentUser = null; currentTaskId = null; currentThreadId = null;
   document.getElementById('app').classList.add('hidden');
   document.getElementById('login-screen').classList.remove('hidden');
@@ -1406,7 +1410,9 @@ function subscribeToTasks() {
 
 function getVisibleTasks() {
   if (!currentUser) return [];
+  // Only Wande (admin) sees everything
   if (currentUser.role === 'admin') return tasks;
+  // Everyone else only sees tasks assigned to them or to All
   return tasks.filter(t => t.assignee === currentUser.name || t.assignee === 'All');
 }
 
@@ -1696,8 +1702,14 @@ function subscribeToThreads() {
     threads = [];
     snap.forEach(doc => {
       const d = doc.data();
-      // Visibility: show if current user is participant
-      if (d.participants && currentUser && !d.participants.includes(currentUser.name) && !d.participants.includes('Team')) return;
+      if (!currentUser) return;
+      // Strict visibility — only show thread if user is explicitly a participant
+      const parts = Array.isArray(d.participants) ? d.participants : [];
+      const isTeamThread = parts.includes('Team');
+      const isParticipant = parts.includes(currentUser.name);
+      // Admin (Wande) sees all threads
+      const isAdmin = currentUser.role === 'admin';
+      if (!isAdmin && !isTeamThread && !isParticipant) return;
       threads.push({ ...d, id: doc.id });
     });
     renderThreadList();
