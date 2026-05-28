@@ -241,34 +241,79 @@ html,body{height:100%;overflow:hidden;font-family:'Inter',-apple-system,sans-ser
 .no-thread{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;color:var(--t3);font-size:13px}
 
 /* ── BRAIN DUMP ── */
-#dump-view{background:radial-gradient(ellipse at 20% 50%,rgba(139,92,246,.07) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(88,166,255,.06) 0%,transparent 50%),var(--bg)}
+#dump-view{background:radial-gradient(ellipse at 20% 50%,rgba(139,92,246,.1) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(88,166,255,.08) 0%,transparent 50%),radial-gradient(ellipse at 50% 80%,rgba(63,185,80,.06) 0%,transparent 50%),var(--bg)}
 #dump-view .view-header{background:transparent;border-bottom-color:rgba(255,255,255,.06)}
-.dump-board{flex:1;overflow:auto;padding:24px 28px;display:flex;align-items:flex-start;gap:28px}
-.dump-compose-wrap{flex-shrink:0;width:220px;display:flex;flex-direction:column;gap:10px;position:sticky;top:0}
+.dump-board{flex:1;overflow:hidden;display:flex;gap:0;min-height:0}
+.dump-compose-wrap{flex-shrink:0;width:240px;display:flex;flex-direction:column;gap:10px;padding:20px 16px;border-right:1px solid rgba(255,255,255,.06);overflow-y:auto;z-index:10}
 .dump-compose-title{font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px}
-.dump-new-note{background:#fef08a;border-radius:3px;padding:14px;display:flex;flex-direction:column;gap:10px;box-shadow:3px 3px 10px rgba(0,0,0,.4),0 1px 0 rgba(255,255,255,.1) inset;position:relative}
-.dump-new-note::before{content:'';position:absolute;top:-8px;left:50%;transform:translateX(-50%);width:24px;height:14px;background:#c084fc;border-radius:2px;box-shadow:0 2px 4px rgba(0,0,0,.4)}
-.dump-new-textarea{background:transparent;border:none;outline:none;font-family:'Inter',sans-serif;font-size:13px;color:#1a1a2e;resize:none;min-height:120px;width:100%;line-height:1.6}
-.dump-new-textarea::placeholder{color:rgba(26,26,46,.5)}
-.dump-new-btn{background:#1a1a2e;color:#fef08a;border:none;border-radius:4px;padding:8px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease;letter-spacing:.3px}
-.dump-new-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.5)}
+.dump-new-note{background:#fef08a;border-radius:4px;padding:14px;display:flex;flex-direction:column;gap:10px;box-shadow:4px 4px 12px rgba(0,0,0,.5),0 1px 0 rgba(255,255,255,.15) inset;position:relative}
+.dump-new-note::before{content:'';position:absolute;top:-9px;left:50%;transform:translateX(-50%);width:26px;height:15px;background:#c084fc;border-radius:2px;box-shadow:0 2px 6px rgba(0,0,0,.5)}
+.dump-new-textarea{background:transparent;border:none;outline:none;font-family:'Inter',sans-serif;font-size:13px;color:#1a1a2e;resize:none;min-height:110px;width:100%;line-height:1.6}
+.dump-new-textarea::placeholder{color:rgba(26,26,46,.45)}
+.dump-new-btn{background:#1a1a2e;color:#fef08a;border:none;border-radius:4px;padding:9px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease;letter-spacing:.3px}
+.dump-new-btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.6)}
 .dump-motivation{background:linear-gradient(135deg,#8B5CF6,#3B82F6);border-radius:var(--r);padding:14px;color:#fff;font-size:12px;line-height:1.5;font-style:italic;position:relative;overflow:hidden}
 .dump-motivation::before{content:'✨';position:absolute;right:10px;bottom:8px;font-size:20px;opacity:.3}
 .dump-motivation strong{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;opacity:.7;margin-bottom:4px;font-style:normal}
-.notes-board{flex:1;columns:3 200px;column-gap:16px;min-height:200px}
-.sticky-note{break-inside:avoid;margin-bottom:16px;border-radius:3px;padding:16px 14px 14px;box-shadow:3px 4px 14px rgba(0,0,0,.4),0 1px 0 rgba(255,255,255,.12) inset;position:relative;animation:noteIn .35s cubic-bezier(.34,1.56,.64,1) both;cursor:default;transition:transform .2s ease,box-shadow .2s ease}
-.sticky-note:hover{transform:rotate(0deg) scale(1.03) translateY(-3px)!important;box-shadow:6px 8px 24px rgba(0,0,0,.5),0 1px 0 rgba(255,255,255,.12) inset;z-index:10}
-@keyframes noteIn{from{opacity:0;transform:scale(.8) rotate(-5deg)}to{opacity:1}}
-.sticky-note::before{content:'';position:absolute;top:-8px;left:50%;transform:translateX(-50%);width:20px;height:12px;border-radius:2px;box-shadow:0 2px 4px rgba(0,0,0,.4)}
+
+/* FREE-FORM CANVAS */
+.notes-board{flex:1;overflow:auto;position:relative}
+.notes-canvas{position:relative;width:2000px;min-height:900px}
+
+/* STICKY NOTE */
+.sticky-note{
+  position:absolute;
+  width:200px;
+  border-radius:4px;
+  padding:16px 14px 14px;
+  box-shadow:4px 5px 18px rgba(0,0,0,.45),0 1px 0 rgba(255,255,255,.15) inset;
+  cursor:grab;
+  user-select:none;
+  transition:box-shadow .2s ease, filter .2s ease;
+  will-change:transform;
+}
+.sticky-note:active{cursor:grabbing}
+.sticky-note.is-dragging{
+  box-shadow:10px 16px 40px rgba(0,0,0,.7),0 1px 0 rgba(255,255,255,.15) inset !important;
+  filter:brightness(1.08) saturate(1.2);
+  z-index:1000 !important;
+  transition:none;
+}
+.sticky-note::before{content:'';position:absolute;top:-9px;left:50%;transform:translateX(-50%);width:22px;height:13px;border-radius:2px;box-shadow:0 2px 5px rgba(0,0,0,.5)}
+/* Pop-in animation */
+@keyframes notePop{
+  0%  {transform:var(--rot-base) scale(0);opacity:0}
+  55% {transform:var(--rot-base) scale(1.18);opacity:1;filter:brightness(1.3) saturate(1.5)}
+  75% {transform:var(--rot-base) scale(0.93)}
+  100%{transform:var(--rot-base) scale(1);filter:brightness(1) saturate(1)}
+}
+.sticky-note.note-new{animation:notePop .5s cubic-bezier(.34,1.56,.64,1) both}
+/* Idle float */
+@keyframes noteFloat{
+  0%,100%{margin-top:0}
+  50%{margin-top:-5px}
+}
+.sticky-note.note-float{animation:noteFloat 4s ease-in-out infinite}
+/* Colour pulse on hover */
+.sticky-note:hover{filter:brightness(1.06) saturate(1.15);box-shadow:6px 8px 28px rgba(0,0,0,.6),0 1px 0 rgba(255,255,255,.15) inset;z-index:50}
+.sn-pin{position:absolute;top:-9px;left:50%;transform:translateX(-50%);width:22px;height:13px;border-radius:2px;box-shadow:0 2px 5px rgba(0,0,0,.5);cursor:grab}
 .sn-text{font-size:13px;color:#1a1a2e;line-height:1.6;margin-bottom:10px;font-weight:500;word-break:break-word;white-space:pre-wrap}
 .sn-meta{font-size:10px;color:rgba(26,26,46,.5);margin-bottom:8px}
 .sn-actions{display:flex;gap:5px;flex-wrap:wrap}
-.sn-btn{padding:4px 9px;border-radius:3px;border:none;background:rgba(26,26,46,.12);color:#1a1a2e;font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;transition:background .15s ease}
-.sn-btn:hover{background:rgba(26,26,46,.25)}
-.sn-converted{opacity:.55}
+.sn-btn{padding:4px 9px;border-radius:3px;border:none;background:rgba(26,26,46,.14);color:#1a1a2e;font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;transition:background .12s ease}
+.sn-btn:hover{background:rgba(26,26,46,.28)}
+.sn-converted{opacity:.6}
 .sn-converted-badge{font-size:10px;font-weight:700;background:rgba(26,26,46,.15);color:#1a1a2e;padding:2px 8px;border-radius:3px;display:inline-flex;align-items:center;gap:3px}
-.dump-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;opacity:.35}
-.dump-empty-icon{font-size:48px;animation:float 3s ease-in-out infinite}
+.dump-empty{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;opacity:.3;pointer-events:none}
+@keyframes notePop{
+  0%  {transform:var(--rot-base,rotate(0deg)) scale(0);opacity:0;filter:brightness(2) saturate(2)}
+  55% {transform:var(--rot-base,rotate(0deg)) scale(1.22);opacity:1;filter:brightness(1.4) saturate(1.6)}
+  75% {transform:var(--rot-base,rotate(0deg)) scale(0.92)}
+  100%{transform:var(--rot-base,rotate(0deg)) scale(1);filter:brightness(1) saturate(1)}
+}
+.sticky-note.note-new{animation:notePop .55s cubic-bezier(.34,1.56,.64,1) both}
+.sticky-note.note-float{filter:brightness(1.07) saturate(1.2);transform:rotate(0deg) translateY(-6px) scale(1.04)!important;box-shadow:8px 10px 30px rgba(0,0,0,.6)!important}
+.sticky-note.is-dragging{box-shadow:12px 18px 45px rgba(0,0,0,.75)!important;filter:brightness(1.1) saturate(1.3);cursor:grabbing!important;transition:none!important}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 
 /* ── FILE VAULT ── */
@@ -649,6 +694,7 @@ select option{background:var(--bg2)}
           <div class="view-title">🧠 Brain Dump</div>
           <div class="view-sub">Dump it. Organise it. Own it.</div>
         </div>
+        <button class="btn btn-primary btn-sm" onclick="focusDumpInput()">+ New Note</button>
         <button class="btn btn-ghost btn-sm" onclick="clearAllDumps()" style="color:var(--t3)">🗑 Clear All</button>
       </div>
       <div class="dump-board">
@@ -664,7 +710,9 @@ select option{background:var(--bg2)}
             <span id="dump-quote-text">Loading your spark…</span>
           </div>
         </div>
-        <div class="notes-board" id="dump-list"></div>
+        <div class="notes-board" id="dump-board-scroll">
+          <div class="notes-canvas" id="dump-list"></div>
+        </div>
       </div>
     </div>
 
@@ -1293,6 +1341,7 @@ function setFilter(f, el) {
 }
 
 let _draggingId = null;
+let _draggingDumpId = null;
 
 function makeTaskCard(t) {
   const div = document.createElement('div');
@@ -1659,16 +1708,18 @@ function updateMsgBadge() {
 //  BRAIN DUMP
 // ══════════════════════════════════════════════════
 const NOTE_COLORS = [
-  { bg:'#fef08a', pin:'#f472b6' }, // yellow
-  { bg:'#bbf7d0', pin:'#34d399' }, // green
-  { bg:'#bfdbfe', pin:'#60a5fa' }, // blue
-  { bg:'#fecaca', pin:'#f87171' }, // red/pink
-  { bg:'#e9d5ff', pin:'#c084fc' }, // purple
-  { bg:'#fed7aa', pin:'#fb923c' }, // orange
-  { bg:'#a5f3fc', pin:'#22d3ee' }, // cyan
-  { bg:'#fde68a', pin:'#fbbf24' }, // amber
+  { bg:'#fef08a', pin:'#f472b6' },
+  { bg:'#bbf7d0', pin:'#34d399' },
+  { bg:'#bfdbfe', pin:'#60a5fa' },
+  { bg:'#fecaca', pin:'#f87171' },
+  { bg:'#e9d5ff', pin:'#c084fc' },
+  { bg:'#fed7aa', pin:'#fb923c' },
+  { bg:'#a5f3fc', pin:'#22d3ee' },
+  { bg:'#fde68a', pin:'#fbbf24' },
+  { bg:'#d9f99d', pin:'#84cc16' },
+  { bg:'#fbcfe8', pin:'#ec4899' },
 ];
-const NOTE_ROTATIONS = [-3, -1.5, -2.5, 1, 2, -1, 3, 1.5, -2, 0.5];
+const NOTE_ROTATIONS = [-4, -2, -3, 1, 2.5, -1, 3.5, 1.5, -2.5, 0.5, -1.5, 2];
 
 const DUMP_QUOTES = [
   "Ideas are the beginning points of all fortunes.",
@@ -1687,23 +1738,58 @@ const DUMP_QUOTES = [
   "The best time to plant an idea was yesterday. The second best time is now.",
 ];
 
+// Free-drag state
+let _dumpDrag = null;
+
+function initDumpCanvas() {
+  if (window._dumpCanvasInit) return;
+  window._dumpCanvasInit = true;
+  window.addEventListener('mousemove', e => {
+    if (!_dumpDrag) return;
+    const dx = e.clientX - _dumpDrag.startX;
+    const dy = e.clientY - _dumpDrag.startY;
+    const nx = Math.max(0, _dumpDrag.origX + dx);
+    const ny = Math.max(0, _dumpDrag.origY + dy);
+    _dumpDrag.el.style.left = nx + 'px';
+    _dumpDrag.el.style.top  = ny + 'px';
+  });
+  window.addEventListener('mouseup', e => {
+    if (!_dumpDrag) return;
+    const dx = e.clientX - _dumpDrag.startX;
+    const dy = e.clientY - _dumpDrag.startY;
+    const d = dumps.find(x => x.id === _dumpDrag.id);
+    if (d) {
+      d.x = Math.max(0, _dumpDrag.origX + dx);
+      d.y = Math.max(0, _dumpDrag.origY + dy);
+      saveDumpsLocal();
+    }
+    _dumpDrag.el.classList.remove('is-dragging');
+    _dumpDrag.el.style.transform = `rotate(${_dumpDrag.rot}deg)`;
+    _dumpDrag = null;
+  });
+}
+
 function saveDump() {
   const text = document.getElementById('dump-input').value.trim();
   if (!text) { toast('Write something first'); return; }
   const colorIdx = dumps.length % NOTE_COLORS.length;
   const rotIdx   = dumps.length % NOTE_ROTATIONS.length;
-  const d = { id:'dump-'+Date.now(), text, by:currentUser.name, at:new Date().toISOString(), converted:false, colorIdx, rotIdx };
+  const x = 40  + Math.random() * 700;
+  const y = 30  + Math.random() * 500;
+  const d = { id:'dump-'+Date.now(), text, by:currentUser.name, at:new Date().toISOString(), converted:false, colorIdx, rotIdx, x, y, isNew:true };
   dumps.unshift(d);
   saveDumpsLocal();
   document.getElementById('dump-input').value = '';
   renderDumps();
   rotateDumpQuote();
-  // tiny celebration
   const btn = document.querySelector('.dump-new-btn');
-  if (btn) { btn.textContent = '✅ Pinned!'; setTimeout(()=>btn.textContent='📌 Pin it!', 1200); }
+  if (btn) { btn.textContent = '\u2705 Pinned!'; setTimeout(()=>btn.textContent='\uD83D\uDCCC Pin it!', 1400); }
 }
 
-function clearDump() { document.getElementById('dump-input').value = ''; }
+function focusDumpInput() {
+  const el = document.getElementById('dump-input');
+  if (el) el.focus();
+}
 
 function clearAllDumps() {
   if (!dumps.length) return;
@@ -1726,29 +1812,61 @@ function renderDumps() {
   const list = document.getElementById('dump-list');
   if (!list) return;
   rotateDumpQuote();
+  initDumpCanvas();
+  list.innerHTML = '';
+
   if (!dumps.length) {
     list.innerHTML = `<div class="dump-empty">
-      <div class="dump-empty-icon">🧠</div>
-      <div style="font-size:14px;font-weight:600;color:var(--t2)">Your board is empty</div>
-      <div style="font-size:12px;color:var(--t3)">Start writing — pin your first idea!</div>
+      <div style="font-size:52px;animation:float 3s ease-in-out infinite">\uD83E\uDDE0</div>
+      <div style="font-size:15px;font-weight:600;color:var(--t2)">Your board is empty</div>
+      <div style="font-size:12px;color:var(--t3)">Write something and hit Pin it!</div>
     </div>`;
     return;
   }
-  list.innerHTML = dumps.map((d, i) => {
-    const c = NOTE_COLORS[d.colorIdx ?? (i % NOTE_COLORS.length)];
+
+  dumps.forEach((d, i) => {
+    const c   = NOTE_COLORS[d.colorIdx ?? (i % NOTE_COLORS.length)];
     const rot = NOTE_ROTATIONS[d.rotIdx ?? (i % NOTE_ROTATIONS.length)];
-    return `<div class="sticky-note${d.converted?' sn-converted':''}"
-      style="background:${c.bg};transform:rotate(${rot}deg);animation-delay:${i*0.06}s">
-      <div class="sticky-note" style="background:${c.pin};position:absolute;top:-8px;left:50%;transform:translateX(-50%);width:20px;height:12px;border-radius:2px;box-shadow:0 2px 4px rgba(0,0,0,.4);padding:0"></div>
+    const x   = d.x ?? (40 + (i % 4) * 220 + (i % 3) * 15);
+    const y   = d.y ?? (40 + Math.floor(i / 4) * 230 + (i % 3) * 10);
+
+    const el = document.createElement('div');
+    el.className = 'sticky-note' + (d.converted ? ' sn-converted' : '') + (d.isNew ? ' note-new' : '');
+    el.dataset.id = d.id;
+    el.style.cssText = `background:${c.bg};left:${x}px;top:${y}px;transform:rotate(${rot}deg);--rot-base:rotate(${rot}deg);z-index:${10+i}`;
+
+    el.innerHTML = `
+      <div class="sn-pin" style="background:${c.pin}"></div>
       <div class="sn-text">${esc(d.text)}</div>
-      <div class="sn-meta">${esc(d.by)} · ${timeAgo(d.at)}</div>
-      ${d.converted ? '<div class="sn-converted-badge">✓ On the board!</div>' : ''}
+      <div class="sn-meta">${esc(d.by)} \u00B7 ${timeAgo(d.at)}</div>
+      ${d.converted ? '<div class="sn-converted-badge">\u2713 On the board!</div>' : ''}
       <div class="sn-actions">
-        ${!d.converted ? `<button class="sn-btn" onclick="openDumpConvert('${d.id}')">📋 → Board</button>` : ''}
-        <button class="sn-btn" onclick="deleteDump('${d.id}')">🗑</button>
-      </div>
-    </div>`;
-  }).join('');
+        ${!d.converted ? `<button class="sn-btn" onclick="openDumpConvert('${d.id}')">\uD83D\uDCCB \u2192 Task</button>` : ''}
+        <button class="sn-btn" onclick="deleteDump('${d.id}')">\uD83D\uDDD1</button>
+      </div>`;
+
+    if (d.isNew) { setTimeout(() => { d.isNew = false; saveDumpsLocal(); }, 700); }
+
+    el.addEventListener('mouseenter', () => { if (!_dumpDrag) el.classList.add('note-float'); });
+    el.addEventListener('mouseleave', () => el.classList.remove('note-float'));
+
+    el.addEventListener('mousedown', e => {
+      if (e.target.closest('.sn-btn')) return;
+      e.preventDefault();
+      _dumpDrag = {
+        id: d.id, el,
+        startX: e.clientX, startY: e.clientY,
+        origX: d.x ?? x, origY: d.y ?? y,
+        rot
+      };
+      el.classList.add('is-dragging');
+      el.classList.remove('note-float');
+      el.style.transform = `rotate(${rot * 0.3}deg) scale(1.1)`;
+      el.style.zIndex = 9999;
+    });
+
+    list.appendChild(el);
+  });
 }
 
 function openDumpConvert(id) {
@@ -1756,7 +1874,7 @@ function openDumpConvert(id) {
   if (!d) return;
   document.getElementById('dt-dump-id').value = id;
   const words = d.text.split(' ').slice(0, 8).join(' ');
-  document.getElementById('dt-title').value = words + (d.text.split(' ').length > 8 ? '…' : '');
+  document.getElementById('dt-title').value = words + (d.text.split(' ').length > 8 ? '\u2026' : '');
   document.getElementById('dt-assignee').value = currentUser.name;
   document.getElementById('dt-due').value = '';
   document.getElementById('dump-task-ov').classList.add('open');
@@ -1783,7 +1901,7 @@ function convertDumpToTask() {
   const d = dumps.find(x => x.id === dumpId);
   if (d) { d.converted = true; saveDumpsLocal(); renderDumps(); }
   closeModal('dump-task-ov');
-  toast('✅ Task created and added to board!', 'good');
+  toast('\u2705 Task created and added to board!', 'good');
 }
 
 function deleteDump(id) {
