@@ -447,6 +447,130 @@ html,body{height:100%;overflow:hidden;font-family:'Inter',-apple-system,sans-ser
 .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:40px;color:var(--t3);font-size:13px;text-align:center}
 .empty-state .es-icon{font-size:36px;opacity:.4}
 select option{background:var(--bg2)}
+
+/* ══════════════════════════════════════════
+   MOBILE  (≤ 768px)
+══════════════════════════════════════════ */
+@media (max-width:768px){
+
+  /* ── LOGIN ── */
+  .login-box{width:94%;padding:24px 18px}
+  .who-btns{flex-direction:column}
+  .who-btn{padding:11px}
+
+  /* ── APP SHELL ── */
+  #app{flex-direction:column}
+  #main{height:calc(100vh - 58px);overflow:hidden}
+
+  /* ── SIDEBAR → BOTTOM NAV ── */
+  #sidebar{
+    width:100%;min-width:0;height:58px;min-height:58px;
+    flex-direction:row;align-items:stretch;
+    border-right:none;border-top:1px solid var(--border);
+    position:fixed;bottom:0;left:0;z-index:200;
+    background:var(--bg1);
+  }
+  .sidebar-top,.user-chip,.sidebar-footer,.nav-section-label{display:none!important}
+  .sidebar-nav{
+    flex:1;padding:0;overflow-x:auto;overflow-y:hidden;
+    display:flex;align-items:stretch;
+    scrollbar-width:none;
+  }
+  .sidebar-nav::-webkit-scrollbar{display:none}
+  .nav-section{
+    display:flex;flex-direction:row;align-items:stretch;
+    margin-bottom:0;width:100%;
+  }
+  .nav-item{
+    flex:1;flex-direction:column;align-items:center;justify-content:center;
+    padding:6px 2px 4px;gap:2px;border-radius:0;
+    font-size:9px;font-weight:600;min-width:46px;
+    white-space:nowrap;overflow:hidden;
+  }
+  .nav-item .nav-icon{font-size:18px;width:auto;line-height:1}
+  .nav-badge{
+    position:absolute;top:4px;right:8px;
+    font-size:8px;padding:1px 4px;min-width:14px;
+  }
+
+  /* ── VIEWS ── */
+  .view-header{padding:12px 14px 10px;flex-wrap:wrap;gap:6px}
+  .view-title{font-size:15px}
+  .view-sub{font-size:11px}
+
+  /* ── DASHBOARD ── */
+  #dash-view .view-body{padding:12px 12px}
+  .dash-grid{grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+  .stat-num{font-size:22px}
+  .dash-row{grid-template-columns:1fr;gap:10px}
+
+  /* ── TASKS ── */
+  #tasks-view .tasks-toolbar{padding:8px 12px;gap:6px}
+  .search-box{width:100%;min-width:0}
+  .kanban{padding:8px 6px}
+  .k-col{min-width:220px;max-width:220px;margin-right:8px}
+  #admin-filter-wrap select{font-size:12px;padding:4px 8px}
+  /* Task panel slides up from bottom on mobile */
+  #task-panel{
+    position:fixed;bottom:58px;left:0;right:0;
+    width:100%;min-width:0;max-height:88vh;
+    transform:translateY(100%);
+    border-left:none;border-top:1px solid var(--border);
+    border-radius:16px 16px 0 0;
+    z-index:150;
+  }
+  #task-panel.open{transform:translateY(0)}
+
+  /* ── MESSAGES ── */
+  #msgs-view .msgs-layout{flex-direction:column}
+  .msgs-sidebar{
+    width:100%;height:auto;max-height:170px;
+    border-right:none;border-bottom:1px solid var(--border);
+  }
+  .msgs-sidebar-hdr{padding:8px 12px;font-size:12px}
+  .thread-item{padding:7px 10px}
+  .msgs-body{padding:10px 12px}
+  .msgs-input-area{padding:8px 12px}
+
+  /* ── BRAIN DUMP ── */
+  .dump-board{flex-direction:column}
+  .dump-compose-wrap{
+    width:100%;border-right:none;
+    border-bottom:1px solid rgba(255,255,255,.06);
+    padding:12px 14px;flex-direction:row;flex-wrap:wrap;gap:8px;
+  }
+  .dump-new-note{flex:1;min-width:180px}
+  .dump-motivation{width:100%}
+  .notes-board{min-height:55vh}
+
+  /* ── FILE VAULT ── */
+  #vault-view .vault-body{padding:12px 12px}
+  .vault-grid{grid-template-columns:1fr}
+
+  /* ── WEEKLY REPORT ── */
+  .wr-stats-row{grid-template-columns:repeat(3,1fr)}
+  .wr-stat{padding:12px 8px}
+  .wr-stat-num{font-size:20px}
+
+  /* ── SUGGESTIONS ── */
+  #sug-view .sug-body{padding:12px 12px}
+  .sug-filter-bar{padding:8px 12px;gap:6px}
+
+  /* ── MODALS ── */
+  .modal{width:96vw;max-width:96vw;padding:20px 16px;border-radius:16px}
+  .mrow{flex-direction:column;gap:0}
+  .mrow .mfield{margin-bottom:12px}
+  .modal-title{font-size:15px;margin-bottom:14px}
+
+  /* ── BUTTONS ── */
+  .btn{padding:6px 12px;font-size:12px}
+  .btn-sm{padding:5px 10px;font-size:11px}
+
+  /* ── MISC ── */
+  .filter-chip{font-size:11px;padding:4px 10px}
+  .tp-body{padding:12px 14px}
+  .tp-header{padding:12px 14px}
+}
 </style>
 </head>
 <body>
@@ -514,6 +638,9 @@ select option{background:var(--bg2)}
         <div class="nav-item" id="nav-sug" onclick="showView('sug')">
           <span class="nav-icon">💡</span> Suggestions
           <span class="nav-badge purple" id="nav-sug-badge" style="display:none">0</span>
+        </div>
+        <div class="nav-item" id="nav-signout" onclick="doLogout()" style="color:var(--t3)" title="Sign out">
+          <span class="nav-icon">🚪</span> <span class="mobile-hide">Sign out</span>
         </div>
       </div>
     </nav>
