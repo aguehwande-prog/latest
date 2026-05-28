@@ -1313,7 +1313,7 @@ function doLogout() {
   if (_unsubSuggestions) { _unsubSuggestions(); _unsubSuggestions = null; }
   Object.values(_unsubMsgs).forEach(u => u && u());
   // Clear ALL cached data so next user starts fresh
-  tasks = []; threads = []; messages = {}; suggestions = [];
+  tasks = []; threads = []; messages = {}; suggestions = []; dumps = [];
   _unsubMsgs = {};
   currentUser = null; currentTaskId = null; currentThreadId = null;
   document.getElementById('app').classList.add('hidden');
@@ -1353,13 +1353,14 @@ function launchApp() {
 // ══════════════════════════════════════════════════
 function loadLocalData() {
   loadColumns();
-  try { dumps = JSON.parse(localStorage.getItem('caldrix_dumps') || '[]'); } catch(e) { dumps = []; }
+  try { dumps = JSON.parse(localStorage.getItem(dumpKey()) || '[]'); } catch(e) { dumps = []; }
   try { files = JSON.parse(localStorage.getItem('caldrix_files') || '[]'); } catch(e) { files = []; }
   renderColumns();
   renderDumps();
   renderVault();
 }
-function saveDumpsLocal() { localStorage.setItem('caldrix_dumps', JSON.stringify(dumps)); }
+function dumpKey() { return 'caldrix_dumps_' + (currentUser?.name || 'shared'); }
+function saveDumpsLocal() { localStorage.setItem(dumpKey(), JSON.stringify(dumps)); }
 function saveFilesLocal() { localStorage.setItem('caldrix_files', JSON.stringify(files)); }
 
 // ══════════════════════════════════════════════════
